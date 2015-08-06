@@ -1,0 +1,28 @@
+{
+  "name": "listen-any-in-range",
+  "version": "0.1.0",
+  "description": "Try to listen on the first free port in a range",
+  "main": "listen-any-in-range.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ewngs/listen-any-in-range.git"
+  },
+  "keywords": [
+    "listen",
+    "range",
+    "port",
+    "scan"
+  ],
+  "author": {
+    "name": "Igor Mucsicska",
+    "email": "igor@elasticwings.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ewngs/listen-any-in-range/issues"
+  },
+  "homepage": "https://github.com/ewngs/listen-any-in-range#readme"
+}
