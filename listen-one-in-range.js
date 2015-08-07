@@ -3,8 +3,8 @@
 var assert = require('assert');
 
 
-function tryPort(ports, listenFn, errorMessage, cb) {
-    var index, port, server;
+function tryPort(ports, server, errorMessage, cb) {
+    var index, port;
 
     if (ports.length < 1) {
         throw new Error(errorMessage);
@@ -12,31 +12,42 @@ function tryPort(ports, listenFn, errorMessage, cb) {
 
     index = Math.floor(Math.random()*ports.length);
     port = (ports.splice(index, 1))[0];
-    server = listenFn(port);
 
-    server.on('listening', function() {
-        server.removeAllListeners(['error', 'listening']);
-        cb(server, port);
-    });
+    server.listen(port);
 
-    server.on('error', function () {
-        server.removeAllListeners(['error', 'listening']);
-        tryPort(ports, listenFn, errorMessage, cb);
-    });
+    function onListening() {
+        removeListeners();
+        cb(port);
+    }
+
+    function onError() {
+        removeListeners();
+        tryPort(ports, server, errorMessage, cb);
+    }
+
+    function removeListeners() {
+        server.removeListener('listening', onListening);
+        server.removeListener('error', onError);
+    }
+
+    server.on('listening', onListening);
+    server.on('error', onError);
 }
 
-module.exports = function(from, to, listenFn, cb){
+module.exports = function(from, to, server, cb){
     var ports = [],
         port = from,
         errorMessage = 'No free port found in range [' + from + ', ' + to + ']';
 
     assert.equal(typeof from, 'number', 'First argument should be lowest port in range');
     assert.equal(typeof to, 'number', 'Second argument should be highest port in range');
-    assert.equal(typeof listenFn, 'function', 'Third argument should be the listen function');
+    assert(server, 'Third argument should be the server');
+    assert.equal(typeof server, 'object', 'Third argument should be the server');
+    assert(server.listen, 'object', 'Serves should have a listen function');
 
     for (; port <= to; port++) {
         ports.push(port);
     }
 
-    tryPort(ports, listenFn, errorMessage, cb);
+    tryPort(ports, server, errorMessage, cb);
 };
