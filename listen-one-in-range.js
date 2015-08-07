@@ -17,7 +17,7 @@ function tryPort(ports, server, errorMessage, cb) {
 
     function onListening() {
         removeListeners();
-        return cb(null, port);
+        return cb(null, port, listeningServer);
     }
 
     function onError() {
