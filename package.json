@@ -1,6 +1,6 @@
 {
   "name": "listen-one-in-range",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Try to listen on the first free port in a range",
   "main": "listen-one-in-range.js",
   "scripts": {
