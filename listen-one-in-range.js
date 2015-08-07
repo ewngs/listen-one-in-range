@@ -7,17 +7,17 @@ function tryPort(ports, server, errorMessage, cb) {
     var index, port;
 
     if (ports.length < 1) {
-        throw new Error(errorMessage);
+        return cb(new Error(errorMessage));
     }
 
-    index = Math.floor(Math.random()*ports.length);
+    index = Math.floor(Math.random() * ports.length);
     port = (ports.splice(index, 1))[0];
 
     server.listen(port);
 
     function onListening() {
         removeListeners();
-        cb(port);
+        return cb(null, port);
     }
 
     function onError() {
