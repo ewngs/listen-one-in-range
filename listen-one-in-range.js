@@ -39,11 +39,15 @@ module.exports = function(from, to, server, cb){
         port = from,
         errorMessage = 'No free port found in range [' + from + ', ' + to + ']';
 
-    assert.equal(typeof from, 'number', 'First argument should be lowest port in range');
-    assert.equal(typeof to, 'number', 'Second argument should be highest port in range');
-    assert(server, 'Third argument should be the server');
-    assert.equal(typeof server, 'object', 'Third argument should be the server');
-    assert(server.listen, 'object', 'Serves should have a listen function');
+    try {
+        assert.equal(typeof from, 'number', 'First argument should be lowest port in range');
+        assert.equal(typeof to, 'number', 'Second argument should be highest port in range');
+        assert(server, 'Third argument should be the server');
+        assert.equal(typeof server, 'object', 'Third argument should be the server');
+        assert(server.listen, 'object', 'Serves should have a listen function');
+    } catch (err) {
+        return cb(err);
+    }
 
     for (; port <= to; port++) {
         ports.push(port);
