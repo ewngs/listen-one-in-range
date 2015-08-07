@@ -13,7 +13,7 @@ function tryPort(ports, server, errorMessage, cb) {
     index = Math.floor(Math.random() * ports.length);
     port = (ports.splice(index, 1))[0];
 
-    server.listen(port);
+    const listeningServer = server.listen(port);
 
     function onListening() {
         removeListeners();
@@ -26,12 +26,12 @@ function tryPort(ports, server, errorMessage, cb) {
     }
 
     function removeListeners() {
-        server.removeListener('listening', onListening);
-        server.removeListener('error', onError);
+        listeningServer.removeListener('listening', onListening);
+        listeningServer.removeListener('error', onError);
     }
 
-    server.on('listening', onListening);
-    server.on('error', onError);
+    listeningServer.on('listening', onListening);
+    listeningServer.on('error', onError);
 }
 
 module.exports = function(from, to, server, cb){
